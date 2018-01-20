@@ -7,15 +7,16 @@
 	on albums.AlbumId = tracks.AlbumId
 	inner join artists
 	on artists.ArtistId = albums.ArtistId
-	where tracks.GenreId=(select genres.GenreId from genres where genres.Name= ? )';
+	where tracks.GenreId=(select genres.GenreId from genres where genres.Name like ? )';
 	$statement = $pdo->prepare($sql);
-	$statement->bindParam(1, $genre);
+	$genreSqlString = "%" . $genre . "%";
+	$statement->bindParam(1, $genreSqlString);
 	$statement->execute();
 	$tracks = $statement->fetchAll(PDO::FETCH_OBJ);
 ?>
 <!DOCTYPE html>
 <html>
-	<?php echo '<script>console.log("' . $sql .'")</script>'?>
+	<?php echo '<script>console.log("' . $genre .'")</script>'?>
 	<head>
 		<title>Tracks</title>
 	</head>
